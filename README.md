@@ -4,7 +4,7 @@
 
 ### By: Jasim Salman
 
-[LinkedIn](www.linkedin.com/in/jasim-salman-0b885b219) | [Github](https://github.com/jasimSalman)
+[LinkedIn](https://bh.linkedin.com/in/jasim-salman-0b885b219) | [Github](https://github.com/jasimSalman)
 
 ---
 
