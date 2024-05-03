@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  max-width: 100vh;
+
+  cursor: url('images/spaceship.png'), auto;
+
+  background: url('images/background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* .chicken {
+  height: 250px;
+  width: 250px;
+  background: url('https://mostaql.hsoubcdn.com/uploads/thumbnails/570460/378580/ab2952b5-3a7f-4c9e-8c65-52b1fd800a72.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-top: 5vh;
+  margin-left: 2vh;
+  position: absolute;
+} */
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100vh;
+  height: 300px;
+}

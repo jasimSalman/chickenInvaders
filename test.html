@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game</title>
+<style>
+    #target {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        position: absolute;
+        top: 200px;
+        left: 200px;
+    }
+
+    #bullet {
+        width: 20px;
+        height: 20px;
+        background-color: blue;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    body{
+      height: 100vh;
+      width: 100vh;
+    }
+</style>
+</head>
+<body>
+
+<script>
+  const repeatChicken = () => {
+  let chickensContainer = document.createElement('div')
+  chickensContainer.classList.add('container')
+  chickensContainer.style.display = 'flex';
+  chickensContainer.style.justifyContent = 'center'; 
+  chickensContainer.style.alignItems = 'center';
+  chickensContainer.style.flexWrap = 'wrap'; 
+  chickensContainer.style.width = "100vh"
+  chickensContainer.style.height = "300px"
+  
+  let repeatCount = Math.floor(Math.random() * 11) + 5
+
+  for (let i = 0; i < repeatCount; i++) {
+    let chicken = document.createElement('div')
+    chicken.classList.add(`chicken${i}`)
+    chicken.style.backgroundImage = "url('https://mostaql.hsoubcdn.com/uploads/thumbnails/570460/378580/ab2952b5-3a7f-4c9e-8c65-52b1fd800a72.png')"
+    chicken.style.width = '250px'
+    chicken.style.height = '250px'
+    chicken.style.display = 'inline-block'
+    chicken.style.backgroundSize = "contain"
+    chicken.style.backgroundRepeat = 'no-repeat'
+    chickensContainer.appendChild(chicken)
+  }
+
+  document.body.appendChild(chickensContainer)
+}
+repeatChicken()
+</script>
+
+<!-- 
+<div id="target"></div>
+<div id="bullet"></div> -->
+
+<!-- <script>
+    const target = document.getElementById('target');
+    const bullet = document.getElementById('bullet');
+    let score = 0;
+
+    // Function to check if the bullet intersects with the target
+    function checkCollision() {
+        const targetRect = target.getBoundingClientRect();
+        const bulletRect = bullet.getBoundingClientRect();
+
+        if (
+            bulletRect.top <= targetRect.bottom &&
+            bulletRect.bottom >= targetRect.top &&
+            bulletRect.left <= targetRect.right &&
+            bulletRect.right >= targetRect.left
+        ) {
+            score++;
+            console.log('Score:', score);
+            // You can update the score display here if needed
+        }
+    }
+
+    // Function to handle shooting action
+    function shoot(event) {
+        const bulletSpeed = 5; // Adjust bullet speed as needed
+        const bulletStep = 2; // Adjust bullet step as needed
+        let bulletTop = event.clientY;
+        let bulletLeft = event.clientX;
+        bullet.style.top = bulletTop + 'px';
+        bullet.style.left = bulletLeft + 'px';
+
+        // Move the bullet until it goes out of bounds
+        const moveBullet = setInterval(function() {
+            bulletTop -= bulletStep;
+            bullet.style.top = bulletTop + 'px';
+            checkCollision(); // Check for collision on each step
+
+            // If the bullet goes out of bounds, stop moving it
+            if (bulletTop < 0) {
+                clearInterval(moveBullet);
+                bullet.style.top = '0px'; // Reset bullet position
+            }
+        }, bulletSpeed);
+    }
+
+    // Event listener for shooting action
+    window.addEventListener('click', shoot);
+</script> -->
+
+</body>
+</html>
