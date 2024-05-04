@@ -24,7 +24,11 @@
     }
     body{
       height: 100vh;
-      width: 100vh;
+      width: 100%;
+      position: relative;
+      position: relative; /* Necessary for positioning children */
+      margin: 0; /* Remove default margin */
+      overflow-x: hidden; 
     }
 </style>
 </head>
@@ -40,6 +44,7 @@
   chickensContainer.style.flexWrap = 'wrap'; 
   chickensContainer.style.width = "100vh"
   chickensContainer.style.height = "300px"
+  chickensContainer.style.position = "absolute"
   
   let repeatCount = Math.floor(Math.random() * 11) + 5
 
@@ -54,10 +59,22 @@
     chicken.style.backgroundRepeat = 'no-repeat'
     chickensContainer.appendChild(chicken)
   }
-
+  
   document.body.appendChild(chickensContainer)
 }
 repeatChicken()
+
+
+let moveInterval = setInterval(function () {
+let cc = document.querySelector(".container") 
+// cc.style.top = cc.offsetTop + 10 + 'px'
+cc.style.left = cc.offsetLeft + 10 + 'px'
+if (cc.offsetLeft + cc.offsetWidth >= document.body.offsetWidth) {
+      clearInterval(moveInterval); // Stop the interval
+    }
+}, 50)
+
+
 </script>
 
 <!-- 

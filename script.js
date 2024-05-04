@@ -39,6 +39,7 @@ const repeatChicken = () => {
 
   document.body.appendChild(chickensContainer)
 }
+
 repeatChicken()
 
 //This function will creat new elemnts to appen on the window
@@ -67,8 +68,10 @@ const newElement = (
 
 //This functio will check if the bullet hit the chicken
 const collision = (shoot, chicken) => {
+  let chick = document.querySelector(`.${chicken}`)
+  console.log(chick)
   let bulleBoundaries = shoot.getBoundingClientRect()
-  let chickenBoundaries = chicken.getBoundingClientRect()
+  let chickenBoundaries = chick.getBoundingClientRect()
 
   if (
     chickenBoundaries.top <= bulleBoundaries.bottom &&
@@ -78,24 +81,28 @@ const collision = (shoot, chicken) => {
   ) {
     let xAxis = chickenBoundaries.left + chickenBoundaries.width / 2
     let yAxis = chickenBoundaries.top + chickenBoundaries.height / 2
-    changeChiken(xAxis, yAxis)
+    changeChiken(xAxis, yAxis, chick)
   }
 }
 
 //This function responsible for moving the shoot
 const moveShoots = (shoot) => {
-  setInterval(function () {
+  let chickenElements = Array.from(chickensContainer.children)
+  let shootInterval = setInterval(function () {
     shoot.style.top = shoot.offsetTop - 10 + 'px'
-    let chickenElements = Array.from(chickensContainer.children)
-    console.log(chickenElements)
-    // chickenElements.forEach((element) => {
-    //   collision(shoot, element)
-    // })
+
+    if (shoot.getBoundingClientRect().top <= 0) {
+      clearInterval(shootInterval)
+      shoot.remove()
+    }
+    chickenElements.forEach((element) => {
+      collision(shoot, element.classList.value)
+    })
   }, 10)
 }
 
 //This function will remove the chicken once hit by a shoot and place a cooked chicken in his place
-const changeChiken = (xAxis, yAxis) => {
+const changeChiken = (xAxis, yAxis, chick) => {
   let deathChicken = newElement(
     'div',
     "url('images/cooked_chicken.png')",
@@ -110,7 +117,7 @@ const changeChiken = (xAxis, yAxis) => {
 
   document.body.append(deathChicken)
   cookedChickenMove(deathChicken)
-  chicken.style.display = 'none'
+  chick.style.display = 'none'
 }
 
 //This function make the deathChicken to fall-down
@@ -123,38 +130,32 @@ const cookedChickenMove = (deathChicken) => {
 document.addEventListener('click', shootChicken)
 
 ////////////////////////////////////////////////////////////////
+const moveChickenLeft = () => {
+  console.log('works')
+  let moveChickenInterval = setInterval(function () {
+    chickensContainer.style.left = chickensContainer.offsetLeft - 10 + 'px'
+    if (chickensContainer.offsetLeft <= 0) {
+      clearInterval(moveChickenInterval)
+      moveChickenRight()
+    }
+  }, 50)
+}
 
-// let interval = setInterval(function () {
-//   let moveRight = true
-//   let stepSize = 10
-//   let currentLeft = chicken.offsetLeft
-//   let currentTop = chicken.offsetTop
+const moveChickenRight = () => {
+  console.log('works')
+  let moveChickenInterval = setInterval(function () {
+    // let chickensContainer = document.querySelector('.container')
 
-//   if (moveRight) {
-//     if (currentLeft + chicken.offsetWidth + stepSize <= window.innerWidth) {
-//       chicken.style.left = currentLeft + stepSize + 'px'
-//     }
-//   } else {
-//     if (currentLeft - stepSize >= 0) {
-//       chicken.style.left = currentLeft - stepSize + 'px'
-//     }
-//   }
+    // cc.style.top = cc.offsetTop + 10 + 'px'
 
-//   if (currentLeft + chicken.offsetWidth >= window.innerWidth) {
-//     moveRight = false
-//   } else if (currentLeft <= 0) {
-//     moveRight = true
-//   }
-// }, 100)
-
-// const getPosition = (event) => {
-//   let xAxis = event.clientX
-//   let yAxis = event.clientY
-// }
-// document.addEventListener('mousemove', getPosition)
-
-// setInterval(function () {
-//   let div = document.querySelector('.chicken')
-//   div.style.top = div.offsetTop + 4 + 'px'
-//   div.style.left = div.offsetLeft + 4 + 'px'
-// }, 400)
+    chickensContainer.style.left = chickensContainer.offsetLeft + 10 + 'px'
+    if (
+      chickensContainer.offsetLeft + chickensContainer.offsetWidth >=
+      document.body.offsetWidth
+    ) {
+      clearInterval(moveChickenInterval)
+      moveChickenLeft()
+    }
+  }, 50)
+}
+moveChickenRight()
