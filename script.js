@@ -8,8 +8,8 @@ const shootChicken = (event) => {
   let shoot = newElement(
     'div',
     "url('images/fire.png')",
-    '80px',
-    '400px',
+    '40px',
+    '200px',
     'contain',
     'no-repeat',
     `${xAxis}px`,
@@ -29,8 +29,8 @@ const repeatChicken = () => {
     chicken.classList.add(`chicken${i}`)
     chicken.style.backgroundImage =
       "url('https://mostaql.hsoubcdn.com/uploads/thumbnails/570460/378580/ab2952b5-3a7f-4c9e-8c65-52b1fd800a72.png')"
-    chicken.style.width = '250px'
-    chicken.style.height = '250px'
+    chicken.style.width = '110px'
+    chicken.style.height = '110px'
     chicken.style.display = 'inline-block'
     chicken.style.backgroundSize = 'contain'
     chicken.style.backgroundRepeat = 'no-repeat'
@@ -67,27 +67,38 @@ const newElement = (
 }
 
 //This functio will check if the bullet hit the chicken
-const collision = (shoot, chicken) => {
-  let chick = document.querySelector(`.${chicken}`)
-  console.log(chick)
-  let bulleBoundaries = shoot.getBoundingClientRect()
+const collision = (shoot, chick) => {
+  // let chick = document.querySelector(`.${chicken}`)
   let chickenBoundaries = chick.getBoundingClientRect()
-
+  let bulleBoundaries = shoot.getBoundingClientRect()
   if (
     chickenBoundaries.top <= bulleBoundaries.bottom &&
     chickenBoundaries.bottom >= bulleBoundaries.top &&
     chickenBoundaries.left <= bulleBoundaries.right &&
     chickenBoundaries.right >= bulleBoundaries.left
   ) {
+    console.log('collision')
     let xAxis = chickenBoundaries.left + chickenBoundaries.width / 2
     let yAxis = chickenBoundaries.top + chickenBoundaries.height / 2
-    changeChiken(xAxis, yAxis, chick)
+    chick.remove()
+    shoot.remove()
+    changeChiken(xAxis, yAxis)
   }
+}
+
+const isCollison = (shoot) => {
+  let chickenElements = Array.from(chickensContainer.children)
+  let collisionOccurred = false
+  chickenElements.forEach((element) => {
+    if (!collisionOccurred) {
+      collisionOccurred = collision(shoot, element)
+    }
+  })
 }
 
 //This function responsible for moving the shoot
 const moveShoots = (shoot) => {
-  let chickenElements = Array.from(chickensContainer.children)
+  // let chickenElements = Array.from(chickensContainer.children)
   let shootInterval = setInterval(function () {
     shoot.style.top = shoot.offsetTop - 10 + 'px'
 
@@ -95,19 +106,17 @@ const moveShoots = (shoot) => {
       clearInterval(shootInterval)
       shoot.remove()
     }
-    chickenElements.forEach((element) => {
-      collision(shoot, element.classList.value)
-    })
+    isCollison(shoot)
   }, 10)
 }
 
 //This function will remove the chicken once hit by a shoot and place a cooked chicken in his place
-const changeChiken = (xAxis, yAxis, chick) => {
+const changeChiken = (xAxis, yAxis) => {
   let deathChicken = newElement(
     'div',
     "url('images/cooked_chicken.png')",
-    '100px',
     '50px',
+    '25px',
     'contain',
     'no-repeat',
     `${xAxis}px`,
@@ -117,45 +126,70 @@ const changeChiken = (xAxis, yAxis, chick) => {
 
   document.body.append(deathChicken)
   cookedChickenMove(deathChicken)
-  chick.style.display = 'none'
 }
 
 //This function make the deathChicken to fall-down
 const cookedChickenMove = (deathChicken) => {
-  setInterval(function () {
+  let moveInterval = setInterval(function () {
     deathChicken.style.top = deathChicken.offsetTop + 20 + 'px'
+
+    if (
+      deathChicken.offsetTop + deathChicken.offsetHeight >=
+      document.body.offsetHeight
+    ) {
+      setTimeout(() => {
+        clearInterval(moveInterval)
+        deathChicken.remove()
+      }, 1000)
+    }
   }, 25)
 }
 
-document.addEventListener('click', shootChicken)
-
-////////////////////////////////////////////////////////////////
 const moveChickenLeft = () => {
-  console.log('works')
   let moveChickenInterval = setInterval(function () {
     chickensContainer.style.left = chickensContainer.offsetLeft - 10 + 'px'
+
+    //Stop the chicek once reach right side
     if (chickensContainer.offsetLeft <= 0) {
       clearInterval(moveChickenInterval)
+      chickensContainer.style.top = chickensContainer.offsetTop + 20 + 'px'
+
+      //Stopt he chicken once reach the bottom
+      if (
+        chickensContainer.offsetTop + chickensContainer.offsetHeight >=
+        document.body.offsetHeight
+      ) {
+        clearInterval(moveChickenInterval)
+      }
       moveChickenRight()
     }
   }, 50)
 }
 
 const moveChickenRight = () => {
-  console.log('works')
   let moveChickenInterval = setInterval(function () {
-    // let chickensContainer = document.querySelector('.container')
-
-    // cc.style.top = cc.offsetTop + 10 + 'px'
-
     chickensContainer.style.left = chickensContainer.offsetLeft + 10 + 'px'
+
+    //To stop the chicken once reach the left
     if (
       chickensContainer.offsetLeft + chickensContainer.offsetWidth >=
       document.body.offsetWidth
     ) {
       clearInterval(moveChickenInterval)
+      chickensContainer.style.top = chickensContainer.offsetTop + 20 + 'px'
+
+      //To stop the chicken once reach the bottom
+      if (
+        chickensContainer.offsetTop + chickensContainer.offsetHeight >=
+        document.body.offsetHeight
+      ) {
+        clearInterval(moveChickenInterval)
+      }
       moveChickenLeft()
     }
   }, 50)
 }
+
 moveChickenRight()
+
+document.addEventListener('click', shootChicken)
