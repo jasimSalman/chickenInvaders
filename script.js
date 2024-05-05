@@ -42,7 +42,7 @@ const repeatChicken = () => {
 
 repeatChicken()
 
-//This function will creat new elemnts to appen on the window
+//This function will creat new elemnts to append on the window
 const newElement = (
   elemType,
   backgroundImg,
@@ -190,6 +190,47 @@ const moveChickenRight = () => {
   }, 50)
 }
 
+//Create egg elemnet and append it to the window randomly
+const dropEggs = () => {
+  let counter = Math.floor(Math.random() * 11) + 5
+
+  let containerBounds = chickensContainer.getBoundingClientRect()
+  let randomX =
+    Math.floor(Math.random() * containerBounds.width) + containerBounds.left
+
+  let egg = newElement(
+    'div',
+    "url('images/egg.png')",
+    '40px',
+    '80px',
+    'contain',
+    'no-repeat',
+    `${randomX}px`,
+    `${containerBounds.bottom}px`,
+    'fixed'
+  )
+
+  document.body.appendChild(egg)
+  moveEggs(egg)
+
+  let delay = Math.floor(Math.random() * 5000) + 1000
+
+  setTimeout(dropEggs, delay)
+}
+
+//This function responsible for moving the eggs downward
+const moveEggs = (egg) => {
+  let eggInterval = setInterval(function () {
+    egg.style.top = egg.offsetTop + 10 + 'px'
+
+    setTimeout(() => {
+      clearInterval(eggInterval)
+      egg.remove()
+    }, 3000)
+  }, 50)
+}
+
+dropEggs()
 moveChickenRight()
 
 document.addEventListener('click', shootChicken)

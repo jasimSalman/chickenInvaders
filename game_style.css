@@ -6,23 +6,12 @@ body {
   position: relative;
   overflow-x: hidden;
 
-  cursor: url('images/spaceship.png'), auto;
+  cursor: url('images/Small_Plane.png'), auto;
 
   background: url('images/background.png');
   background-repeat: no-repeat;
   background-size: cover;
 }
-
-/* .chicken {
-  height: 250px;
-  width: 250px;
-  background: url('https://mostaql.hsoubcdn.com/uploads/thumbnails/570460/378580/ab2952b5-3a7f-4c9e-8c65-52b1fd800a72.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-  margin-top: 5vh;
-  margin-left: 2vh;
-  position: absolute;
-} */
 
 .container {
   display: flex;
