@@ -22,3 +22,30 @@ body {
   height: 300px;
   position: absolute;
 }
+
+.header {
+  color: white;
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  flex-direction: row;
+  margin-left: 20px;
+}
+
+span {
+  width: 100px;
+  display: inline-block;
+}
+
+.lifepoints {
+  display: flex;
+}
+
+.lifepoints div {
+  height: 50px;
+  width: 50px;
+  display: flex;
+  flex-direction: row;
+}

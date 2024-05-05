@@ -1,9 +1,34 @@
 let chickensContainer = document.querySelector('.container')
+let moveChickenRightInterval
+let moveChickenLeftInterval
+let xAxis
+let yAxis
+let mouseX
+let mouseY
+let score = document.querySelector('span')
+let scorePoints = 0
+let lifePoint = document.querySelectorAll('.lifepoints div')
+
+//This function to initiate the game
+const init = () => {
+  repeatChicken()
+  dropEggs()
+  moveChickenRight()
+}
+
+//This fucntion to reset the game after each round
+const reset = () => {
+  chickensContainer.style.top = '0'
+  chickensContainer.style.left = '0'
+  clearInterval(moveChickenLeftInterval)
+  clearInterval(moveChickenRightInterval)
+  init()
+}
 
 //This functio to allow the palyer to shoot from his spaceship
 const shootChicken = (event) => {
-  let xAxis = event.clientX
-  let yAxis = event.clientY
+  xAxis = event.clientX
+  yAxis = event.clientY
 
   let shoot = newElement(
     'div',
@@ -40,8 +65,6 @@ const repeatChicken = () => {
   document.body.appendChild(chickensContainer)
 }
 
-repeatChicken()
-
 //This function will creat new elemnts to append on the window
 const newElement = (
   elemType,
@@ -67,8 +90,7 @@ const newElement = (
 }
 
 //This functio will check if the bullet hit the chicken
-const collision = (shoot, chick) => {
-  // let chick = document.querySelector(`.${chicken}`)
+const chickenShootCollision = (shoot, chick) => {
   let chickenBoundaries = chick.getBoundingClientRect()
   let bulleBoundaries = shoot.getBoundingClientRect()
   if (
@@ -77,9 +99,11 @@ const collision = (shoot, chick) => {
     chickenBoundaries.left <= bulleBoundaries.right &&
     chickenBoundaries.right >= bulleBoundaries.left
   ) {
-    console.log('collision')
     let xAxis = chickenBoundaries.left + chickenBoundaries.width / 2
     let yAxis = chickenBoundaries.top + chickenBoundaries.height / 2
+    scorePoints += 20
+    score.innerHTML = scorePoints
+
     chick.remove()
     shoot.remove()
     changeChiken(xAxis, yAxis)
@@ -91,14 +115,13 @@ const isCollison = (shoot) => {
   let collisionOccurred = false
   chickenElements.forEach((element) => {
     if (!collisionOccurred) {
-      collisionOccurred = collision(shoot, element)
+      collisionOccurred = chickenShootCollision(shoot, element)
     }
   })
 }
 
 //This function responsible for moving the shoot
 const moveShoots = (shoot) => {
-  // let chickenElements = Array.from(chickensContainer.children)
   let shootInterval = setInterval(function () {
     shoot.style.top = shoot.offsetTop - 10 + 'px'
 
@@ -146,12 +169,12 @@ const cookedChickenMove = (deathChicken) => {
 }
 
 const moveChickenLeft = () => {
-  let moveChickenInterval = setInterval(function () {
+  moveChickenLeftInterval = setInterval(function () {
     chickensContainer.style.left = chickensContainer.offsetLeft - 10 + 'px'
 
     //Stop the chicek once reach right side
     if (chickensContainer.offsetLeft <= 0) {
-      clearInterval(moveChickenInterval)
+      clearInterval(moveChickenLeftInterval)
       chickensContainer.style.top = chickensContainer.offsetTop + 20 + 'px'
 
       //Stopt he chicken once reach the bottom
@@ -159,15 +182,18 @@ const moveChickenLeft = () => {
         chickensContainer.offsetTop + chickensContainer.offsetHeight >=
         document.body.offsetHeight
       ) {
-        clearInterval(moveChickenInterval)
+        clearInterval(moveChickenLeftInterval)
       }
       moveChickenRight()
+    }
+    if (chickensContainer.children.length === 0) {
+      reset()
     }
   }, 50)
 }
 
 const moveChickenRight = () => {
-  let moveChickenInterval = setInterval(function () {
+  moveChickenRightInterval = setInterval(function () {
     chickensContainer.style.left = chickensContainer.offsetLeft + 10 + 'px'
 
     //To stop the chicken once reach the left
@@ -175,7 +201,7 @@ const moveChickenRight = () => {
       chickensContainer.offsetLeft + chickensContainer.offsetWidth >=
       document.body.offsetWidth
     ) {
-      clearInterval(moveChickenInterval)
+      clearInterval(moveChickenRightInterval)
       chickensContainer.style.top = chickensContainer.offsetTop + 20 + 'px'
 
       //To stop the chicken once reach the bottom
@@ -183,17 +209,19 @@ const moveChickenRight = () => {
         chickensContainer.offsetTop + chickensContainer.offsetHeight >=
         document.body.offsetHeight
       ) {
-        clearInterval(moveChickenInterval)
+        clearInterval(moveChickenRightInterval)
       }
       moveChickenLeft()
+    }
+
+    if (chickensContainer.children.length === 0) {
+      reset()
     }
   }, 50)
 }
 
 //Create egg elemnet and append it to the window randomly
 const dropEggs = () => {
-  let counter = Math.floor(Math.random() * 11) + 5
-
   let containerBounds = chickensContainer.getBoundingClientRect()
   let randomX =
     Math.floor(Math.random() * containerBounds.width) + containerBounds.left
@@ -209,6 +237,8 @@ const dropEggs = () => {
     `${containerBounds.bottom}px`,
     'fixed'
   )
+  egg.classList.add('egg')
+  // eggPlayerCollision()
 
   document.body.appendChild(egg)
   moveEggs(egg)
@@ -230,7 +260,37 @@ const moveEggs = (egg) => {
   }, 50)
 }
 
-dropEggs()
-moveChickenRight()
+//This functio will check if the bullet hit the chicken
+const eggPlayerCollision = () => {
+  let count = 0
+  let eggs = document.querySelectorAll('.egg')
+  // console.log(mouseX)
+  // console.log(mouseY)
+  for (let i = 0; i < eggs.length; i++) {
+    let eggBoundaries = eggs[i].getBoundingClientRect()
+    if (
+      eggBoundaries.top <= mouseY &&
+      eggBoundaries.bottom >= mouseY &&
+      eggBoundaries.left <= mouseX &&
+      eggBoundaries.right >= mouseX
+    ) {
+      let xAxis = eggBoundaries.left + eggBoundaries.width / 2
+      let yAxis = eggBoundaries.top + eggBoundaries.height / 2
+      console.log('collison')
+
+      // while (count <= 3) {
+      lifePoint[count].style.display = 'none'
+      count++
+      // }
+    }
+  }
+}
 
 document.addEventListener('click', shootChicken)
+
+document.addEventListener('mousemove', function (event) {
+  mouseX = event.clientX
+  mouseY = event.clientY
+  eggPlayerCollision()
+})
+// window.addEventListener('load', init)
