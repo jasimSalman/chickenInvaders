@@ -13,11 +13,7 @@ let initialInterval = 50
 let intervalDecrease = 5
 let currentInterval = initialInterval
 
-const gameReset = () => {
-  score = 0
-  currentInterval = initialInterval
-  init()
-}
+let endGame = document.querySelector('.end_game')
 
 //This function to initiate the game
 const init = () => {
@@ -73,7 +69,6 @@ const repeatChicken = () => {
     chicken.style.backgroundRepeat = 'no-repeat'
     chickensContainer.appendChild(chicken)
   }
-
   document.body.appendChild(chickensContainer)
 }
 
@@ -115,13 +110,13 @@ const chickenShootCollision = (shoot, chick) => {
     let yAxis = chickenBoundaries.top + chickenBoundaries.height / 2
     scorePoints += 20
     score.innerHTML = scorePoints
-
     chick.remove()
     shoot.remove()
     changeChiken(xAxis, yAxis)
   }
 }
 
+//This function  will iterate over the chickens and check for the collision
 const isCollison = (shoot) => {
   let chickenElements = Array.from(chickensContainer.children)
   let collisionOccurred = false
@@ -190,7 +185,7 @@ const moveChickenLeft = () => {
       clearInterval(moveChickenLeftInterval)
       chickensContainer.style.top = chickensContainer.offsetTop + 20 + 'px'
 
-      //Stopt he chicken once reach the bottom
+      //Stopt the chicken once reach the bottom
       if (
         chickensContainer.offsetTop + chickensContainer.offsetHeight >=
         document.body.offsetHeight
@@ -292,16 +287,18 @@ const eggPlayerCollision = () => {
         remainingLife--
         console.log('Life point removed. Remaining life points:', remainingLife)
         eggs[i].remove()
-      } else if (lifePoints === 0) {
-        console.log('Game over ')
+      } else if (remainingLife < 1) {
+        console.log('game over')
+
+        gameReset()
       }
     }
   }
 }
+const gameOver = () => {}
 
 //This function will check if there are a collsion between the player and the chickens
 const chickenPlayerCollision = () => {
-  let lifePoints = document.querySelectorAll('.lifepoints .point')
   let conatinerBoundaries = chickensContainer.getBoundingClientRect()
 
   if (
@@ -310,16 +307,9 @@ const chickenPlayerCollision = () => {
     conatinerBoundaries.left <= mouseX &&
     conatinerBoundaries.right >= mouseX
   ) {
-    if (remainingLife > 0) {
-      lifePoints[remainingLife - 1].style.display = 'none'
-      remainingLife--
-      console.log('Life point removed. Remaining life points:', remainingLife)
-
-      mouseX = 0
-      mouseY = 0
-    } else if (lifePoints === 0) {
-      console.log('Game over ')
-    }
+    document.body.innerHTML = ''
+    console.log('Game over ')
+    endGame.display = 'flex'
   }
 }
 
@@ -330,4 +320,5 @@ document.addEventListener('mousemove', function (event) {
   eggPlayerCollision()
   chickenPlayerCollision()
 })
-// window.addEventListener('load', init)
+
+window.addEventListener('load', init)
