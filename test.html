@@ -29,52 +29,112 @@
       position: relative; /* Necessary for positioning children */
       margin: 0; /* Remove default margin */
       overflow-x: hidden; 
-    cursor: url('images/cooked_chicken.png'), auto;
+    /* cursor: url('images/cooked_chicken.png'), auto; */
 
     }
 </style>
 </head>
 <body>
-
+    <div class="header">
+        <div class="score">Score: <span></span></div>
+        <div class="lifepoints">
+          <div class="point"><img src="images/lifepoint.png" alt=""></div>
+          <div class="point"><img src="images/lifepoint.png" alt=""></div>
+          <div class="point"><img src="images/lifepoint.png" alt=""></div>
+        </div>
+      </div>
+      <div class="container"></div>
 <script>
-  const repeatChicken = () => {
-  let chickensContainer = document.createElement('div')
-  chickensContainer.classList.add('container')
-  chickensContainer.style.display = 'flex';
-  chickensContainer.style.justifyContent = 'center'; 
-  chickensContainer.style.alignItems = 'center';
-  chickensContainer.style.flexWrap = 'wrap'; 
-  chickensContainer.style.width = "100vh"
-  chickensContainer.style.height = "300px"
-  chickensContainer.style.position = "absolute"
-  
-  let repeatCount = Math.floor(Math.random() * 11) + 5
-
-  for (let i = 0; i < repeatCount; i++) {
-    let chicken = document.createElement('div')
-    chicken.classList.add(`chicken${i}`)
-    chicken.style.backgroundImage = "url('https://mostaql.hsoubcdn.com/uploads/thumbnails/570460/378580/ab2952b5-3a7f-4c9e-8c65-52b1fd800a72.png')"
-    chicken.style.width = '250px'
-    chicken.style.height = '250px'
-    chicken.style.display = 'inline-block'
-    chicken.style.backgroundSize = "contain"
-    chicken.style.backgroundRepeat = 'no-repeat'
-    chickensContainer.appendChild(chicken)
-  }
-  
-  document.body.appendChild(chickensContainer)
+ 
+//This function will creat new elemnts to append on the window
+const newElement = (
+  elemType,
+  backgroundImg,
+  width,
+  height,
+  bgSize,
+  bgRepeat,
+  left,
+  top,
+  position
+) => {
+  let elem = document.createElement(elemType)
+  elem.style.background = backgroundImg
+  elem.style.width = width
+  elem.style.height = height
+  elem.style.backgroundSize = bgSize
+  elem.style.backgroundRepeat = bgRepeat
+  elem.style.left = left
+  elem.style.top = top
+  elem.style.position = position
+  return elem
 }
-repeatChicken()
 
 
-let moveInterval = setInterval(function () {
-let cc = document.querySelector(".container") 
-// cc.style.top = cc.offsetTop + 10 + 'px'
-cc.style.left = cc.offsetLeft + 10 + 'px'
-if (cc.offsetLeft + cc.offsetWidth >= document.body.offsetWidth) {
-      clearInterval(moveInterval); // Stop the interval
+
+
+ const dropEggs = () => {
+  let containerBounds = chickensContainer.getBoundingClientRect()
+  let randomX =
+    Math.floor(Math.random() * containerBounds.width) + containerBounds.left
+
+  let egg = newElement(
+    'div',
+    "url('images/egg.png')",
+    '40px',
+    '80px',
+    'contain',
+    'no-repeat',
+    `${randomX}px`,
+    `${containerBounds.bottom}px`,
+    'fixed'
+  )
+  egg.classList.add('egg')
+
+  document.body.appendChild(egg)
+  moveEggs(egg)
+
+  let delay = Math.floor(Math.random() * 5000) + 1000
+
+  setTimeout(dropEggs, delay)
+}
+
+//This function responsible for moving the eggs downward
+const moveEggs = (egg) => {
+  let eggInterval = setInterval(function () {
+    egg.style.top = egg.offsetTop + 10 + 'px'
+
+    setTimeout(() => {
+      clearInterval(eggInterval)
+      egg.remove()
+    }, 3000)
+  }, 50)
+}
+
+//This functio will check if the bullet hit the chicken
+const eggPlayerCollision = () => {
+  let eggs = document.querySelectorAll('.egg')
+  let lifePoints = document.querySelectorAll('.lifepoints .point')
+  let remainingLife = lifePoints.length
+
+  for (let i = 0; i < eggs.length; i++) {
+    let eggBoundaries = eggs[i].getBoundingClientRect()
+    console.log(eggBoundaries)
+
+    if (
+      eggBoundaries.top <= mouseY &&
+      eggBoundaries.bottom >= mouseY &&
+      eggBoundaries.left <= mouseX &&
+      eggBoundaries.right >= mouseX
+    ) {
+      if (remainingLife > 0) {
+        lifePoints[remainingLife - 1].style.display = 'none'
+        remainingLife--
+      }
     }
-}, 50)
+  }
+}
+
 
 
 </script>

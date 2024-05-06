@@ -7,7 +7,7 @@ let mouseX
 let mouseY
 let score = document.querySelector('span')
 let scorePoints = 0
-let lifePoint = document.querySelectorAll('.lifepoints div')
+let remainingLife = 3
 
 //This function to initiate the game
 const init = () => {
@@ -238,7 +238,6 @@ const dropEggs = () => {
     'fixed'
   )
   egg.classList.add('egg')
-  // eggPlayerCollision()
 
   document.body.appendChild(egg)
   moveEggs(egg)
@@ -260,28 +259,43 @@ const moveEggs = (egg) => {
   }, 50)
 }
 
-//This functio will check if the bullet hit the chicken
 const eggPlayerCollision = () => {
-  let count = 0
   let eggs = document.querySelectorAll('.egg')
-  // console.log(mouseX)
-  // console.log(mouseY)
+  let lifePoints = document.querySelectorAll('.lifepoints .point')
+
   for (let i = 0; i < eggs.length; i++) {
     let eggBoundaries = eggs[i].getBoundingClientRect()
+
     if (
       eggBoundaries.top <= mouseY &&
       eggBoundaries.bottom >= mouseY &&
       eggBoundaries.left <= mouseX &&
       eggBoundaries.right >= mouseX
     ) {
-      let xAxis = eggBoundaries.left + eggBoundaries.width / 2
-      let yAxis = eggBoundaries.top + eggBoundaries.height / 2
-      console.log('collison')
+      if (remainingLife > 0) {
+        lifePoints[remainingLife - 1].style.display = 'none'
+        remainingLife--
+        console.log('Life point removed. Remaining life points:', remainingLife)
+        eggs[i].remove()
+      }
+    }
+  }
+}
 
-      // while (count <= 3) {
-      lifePoint[count].style.display = 'none'
-      count++
-      // }
+const chickenPlayerCollision = () => {
+  let lifePoints = document.querySelectorAll('.lifepoints .point')
+
+  let conatinerBoundaries = chickensContainer.getBoundingClientRect()
+
+  if (
+    conatinerBoundaries.top <= mouseY &&
+    conatinerBoundaries.bottom >= mouseY &&
+    conatinerBoundaries.left <= mouseX &&
+    conatinerBoundaries.right >= mouseX
+  ) {
+    if (remainingLife > 0) {
+      lifePoints[remainingLife - 1].style.display = 'none'
+      console.log('Life point removed. Remaining life points:', remainingLife)
     }
   }
 }
@@ -292,5 +306,6 @@ document.addEventListener('mousemove', function (event) {
   mouseX = event.clientX
   mouseY = event.clientY
   eggPlayerCollision()
+  chickenPlayerCollision()
 })
 // window.addEventListener('load', init)
