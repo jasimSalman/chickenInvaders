@@ -9,6 +9,10 @@ let score = document.querySelector('span')
 let scorePoints = 0
 let remainingLife = 3
 
+let initialInterval = 50 // Initial interval duration
+let intervalDecrease = 5 // Amount to decrease the interval after each iteration
+let currentInterval = initialInterval // Current interval duration
+
 //This function to initiate the game
 const init = () => {
   repeatChicken()
@@ -22,6 +26,7 @@ const reset = () => {
   chickensContainer.style.left = '0'
   clearInterval(moveChickenLeftInterval)
   clearInterval(moveChickenRightInterval)
+  currentInterval -= intervalDecrease
   init()
 }
 
@@ -189,7 +194,7 @@ const moveChickenLeft = () => {
     if (chickensContainer.children.length === 0) {
       reset()
     }
-  }, 50)
+  }, currentInterval)
 }
 
 const moveChickenRight = () => {
@@ -217,7 +222,7 @@ const moveChickenRight = () => {
     if (chickensContainer.children.length === 0) {
       reset()
     }
-  }, 50)
+  }, currentInterval)
 }
 
 //Create egg elemnet and append it to the window randomly
@@ -259,6 +264,7 @@ const moveEggs = (egg) => {
   }, 50)
 }
 
+//This function  will check if there is a collsion  between the player and eggs
 const eggPlayerCollision = () => {
   let eggs = document.querySelectorAll('.egg')
   let lifePoints = document.querySelectorAll('.lifepoints .point')
@@ -284,7 +290,6 @@ const eggPlayerCollision = () => {
 
 const chickenPlayerCollision = () => {
   let lifePoints = document.querySelectorAll('.lifepoints .point')
-
   let conatinerBoundaries = chickensContainer.getBoundingClientRect()
 
   if (
@@ -295,7 +300,11 @@ const chickenPlayerCollision = () => {
   ) {
     if (remainingLife > 0) {
       lifePoints[remainingLife - 1].style.display = 'none'
+      remainingLife--
       console.log('Life point removed. Remaining life points:', remainingLife)
+
+      mouseX = 0
+      mouseY = 0
     }
   }
 }
