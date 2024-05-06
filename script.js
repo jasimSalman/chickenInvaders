@@ -9,12 +9,19 @@ let score = document.querySelector('span')
 let scorePoints = 0
 let remainingLife = 3
 
-let initialInterval = 50 // Initial interval duration
-let intervalDecrease = 5 // Amount to decrease the interval after each iteration
-let currentInterval = initialInterval // Current interval duration
+let initialInterval = 50
+let intervalDecrease = 5
+let currentInterval = initialInterval
+
+const gameReset = () => {
+  score = 0
+  currentInterval = initialInterval
+  init()
+}
 
 //This function to initiate the game
 const init = () => {
+  chickensContainer.style.display = 'flex'
   repeatChicken()
   dropEggs()
   moveChickenRight()
@@ -173,6 +180,7 @@ const cookedChickenMove = (deathChicken) => {
   }, 25)
 }
 
+//This function  will move the chickens to the left side.
 const moveChickenLeft = () => {
   moveChickenLeftInterval = setInterval(function () {
     chickensContainer.style.left = chickensContainer.offsetLeft - 10 + 'px'
@@ -197,6 +205,7 @@ const moveChickenLeft = () => {
   }, currentInterval)
 }
 
+//This function  will move the chickens to the right side.
 const moveChickenRight = () => {
   moveChickenRightInterval = setInterval(function () {
     chickensContainer.style.left = chickensContainer.offsetLeft + 10 + 'px'
@@ -283,11 +292,14 @@ const eggPlayerCollision = () => {
         remainingLife--
         console.log('Life point removed. Remaining life points:', remainingLife)
         eggs[i].remove()
+      } else if (lifePoints === 0) {
+        console.log('Game over ')
       }
     }
   }
 }
 
+//This function will check if there are a collsion between the player and the chickens
 const chickenPlayerCollision = () => {
   let lifePoints = document.querySelectorAll('.lifepoints .point')
   let conatinerBoundaries = chickensContainer.getBoundingClientRect()
@@ -305,12 +317,13 @@ const chickenPlayerCollision = () => {
 
       mouseX = 0
       mouseY = 0
+    } else if (lifePoints === 0) {
+      console.log('Game over ')
     }
   }
 }
 
 document.addEventListener('click', shootChicken)
-
 document.addEventListener('mousemove', function (event) {
   mouseX = event.clientX
   mouseY = event.clientY
