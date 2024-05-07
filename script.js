@@ -14,9 +14,10 @@ let intervalDecrease = 5
 let currentInterval = initialInterval
 
 let endGame = document.querySelector('.end_game')
-let eggs = document.querySelectorAll('.egg')
+let lifePoints = document.querySelectorAll('.lifepoints .point')
 
 let isGameOver = false
+let playAgain = document.querySelector('.playAgain')
 
 //This function to initiate the game
 const init = () => {
@@ -234,6 +235,10 @@ const moveChickenRight = () => {
 
 //Create egg elemnet and append it to the window randomly
 const dropEggs = () => {
+  if (isGameOver) {
+    return
+  }
+
   let containerBounds = chickensContainer.getBoundingClientRect()
   let randomX =
     Math.floor(Math.random() * containerBounds.width) + containerBounds.left
@@ -274,7 +279,6 @@ const moveEggs = (egg) => {
 //This function  will check if there is a collsion  between the player and eggs
 const eggPlayerCollision = () => {
   let eggs = document.querySelectorAll('.egg')
-  let lifePoints = document.querySelectorAll('.lifepoints .point')
 
   for (let i = 0; i < eggs.length; i++) {
     let eggBoundaries = eggs[i].getBoundingClientRect()
@@ -296,18 +300,38 @@ const eggPlayerCollision = () => {
   }
 }
 
+const playAgainFunction = () => {
+  isGameOver = false
+  endGame.style.display = 'none'
+  document.addEventListener('click', shootChicken)
+  document.addEventListener('mousemove', mouseMovments)
+  document.body.style.cursor = "url('images/Small_Plane.png'), auto"
+  scorePoints = 0
+
+  lifePoints.forEach((element) => {
+    element.style.display = 'flex'
+  })
+  remainingLife = 3
+
+  chickensContainer.style.top = '0'
+  chickensContainer.style.left = '0'
+  clearInterval(moveChickenLeftInterval)
+  clearInterval(moveChickenRightInterval)
+  chickensContainer.innerHTML = ''
+  init()
+}
+
 const gameOver = () => {
+  isGameOver = true
   endGame.style.display = 'flex'
   clearInterval(moveChickenLeftInterval)
   clearInterval(moveChickenRightInterval)
 
-  document.removeEventListener('click', shootChicken)
-  document.removeEventListener('mousemove', handleMouseMove)
-  document.body.style.cursor = 'pointer'
+  // chickensContainer.style.display = 'none'
 
-  for (let i = 0; i < eggs.length; i++) {
-    eggs[i].style.display = 'none'
-  }
+  document.removeEventListener('click', shootChicken)
+  document.removeEventListener('mousemove', mouseMovments)
+  document.body.style.cursor = 'pointer'
 }
 
 //This function will check if there are a collsion between the player and the chickens
@@ -324,7 +348,7 @@ const chickenPlayerCollision = () => {
   }
 }
 
-function handleMouseMove(event) {
+const mouseMovments = (event) => {
   mouseX = event.clientX
   mouseY = event.clientY
   eggPlayerCollision()
@@ -332,6 +356,7 @@ function handleMouseMove(event) {
 }
 
 document.addEventListener('click', shootChicken)
-document.addEventListener('mousemove', handleMouseMove)
+document.addEventListener('mousemove', mouseMovments)
 
 window.addEventListener('load', init)
+playAgain.addEventListener('click', playAgainFunction)
