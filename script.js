@@ -170,7 +170,7 @@ const cookedChickenMove = (cookedChicken) => {
   }, 25)
 }
 
-//This function  will move the chickens to the left side.
+//This function will move the chickens to the left side.
 const moveChickenLeft = () => {
   moveChickenLeftInterval = setInterval(function () {
     chickensContainer.style.left = chickensContainer.offsetLeft - 10 + 'px'
@@ -195,7 +195,7 @@ const moveChickenLeft = () => {
   }, currentInterval)
 }
 
-//This function  will move the chickens to the right side.
+//This function will move the chickens to the right side.
 const moveChickenRight = () => {
   moveChickenRightInterval = setInterval(function () {
     chickensContainer.style.left = chickensContainer.offsetLeft + 10 + 'px'
@@ -229,7 +229,6 @@ const dropEggs = () => {
   if (isGameOver) {
     return
   }
-
   let containerBounds = chickensContainer.getBoundingClientRect()
   let randomX =
     Math.floor(Math.random() * containerBounds.width) + containerBounds.left
@@ -246,16 +245,14 @@ const dropEggs = () => {
     'fixed'
   )
   egg.classList.add('egg')
-
   document.body.appendChild(egg)
   moveEggs(egg)
 
   let delay = Math.floor(Math.random() * 5000) + 1000
-
   setTimeout(dropEggs, delay)
 }
 
-//This function responsible for moving the eggs downward
+//This function is responsible for moving the eggs downward
 const moveEggs = (egg) => {
   let eggInterval = setInterval(function () {
     egg.style.top = egg.offsetTop + 10 + 'px'
@@ -291,6 +288,7 @@ const eggPlayerCollision = () => {
   }
 }
 
+//This function is responsible for resetting the whole game
 const playAgainFunction = () => {
   isGameOver = false
   endGame.style.display = 'none'
@@ -304,9 +302,7 @@ const playAgainFunction = () => {
     element.style.display = 'flex'
   })
   remainingLife = 2
-
   currentInterval = initialInterval
-
   chickensContainer.style.top = '0'
   chickensContainer.style.left = '0'
   clearInterval(moveChickenLeftInterval)
@@ -317,17 +313,17 @@ const playAgainFunction = () => {
 
 const gameOver = () => {
   isGameOver = true
+  chickensContainer.style.display = 'none'
   endGame.style.display = 'flex'
   lifePoints[0].style.display = 'none'
   clearInterval(moveChickenLeftInterval)
   clearInterval(moveChickenRightInterval)
-
   document.removeEventListener('click', shootChicken)
   document.removeEventListener('mousemove', mouseMovments)
   document.body.style.cursor = 'pointer'
 }
 
-//This function will check if there are a collsion between the player and the chickens
+//This function will check if there is a collision between the player and the chickens
 const chickenPlayerCollision = () => {
   let conatinerBoundaries = chickensContainer.getBoundingClientRect()
 
