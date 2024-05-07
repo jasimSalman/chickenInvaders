@@ -136,36 +136,35 @@ const moveShoots = (shoot) => {
   }, 10)
 }
 
-//This function will remove the chicken once hit by a shoot and place a cooked chicken in his place
-const changeChiken = (mouseX, mouseY) => {
-  let deathChicken = newElement(
+//This function will remove the chicken once hit by a shoot and place a cooked chicken in its place
+const changeChiken = (xAxis, yAxis) => {
+  let cookedChicken = newElement(
     'div',
     "url('images/cooked_chicken.png')",
     '50px',
     '25px',
     'contain',
     'no-repeat',
-    `${mouseX}px`,
-    `${mouseY}px`,
+    `${xAxis}px`,
+    `${yAxis}px`,
     'fixed'
   )
-
-  document.body.append(deathChicken)
-  cookedChickenMove(deathChicken)
+  document.body.append(cookedChicken)
+  cookedChickenMove(cookedChicken)
 }
 
-//This function make the deathChicken to fall-down
-const cookedChickenMove = (deathChicken) => {
+//This function makes the cooked Chicken fall
+const cookedChickenMove = (cookedChicken) => {
   let moveInterval = setInterval(function () {
-    deathChicken.style.top = deathChicken.offsetTop + 20 + 'px'
+    cookedChicken.style.top = cookedChicken.offsetTop + 20 + 'px'
 
     if (
-      deathChicken.offsetTop + deathChicken.offsetHeight >=
+      cookedChicken.offsetTop + cookedChicken.offsetHeight >=
       document.body.offsetHeight
     ) {
       setTimeout(() => {
         clearInterval(moveInterval)
-        deathChicken.remove()
+        cookedChicken.remove()
       }, 1000)
     }
   }, 25)
