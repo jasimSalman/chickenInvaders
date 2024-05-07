@@ -294,7 +294,7 @@ const playAgainFunction = () => {
   endGame.style.display = 'none'
   document.addEventListener('click', shootChicken)
   document.addEventListener('mousemove', mouseMovments)
-  document.body.style.cursor = "url('images/Small_Plane.png'), auto"
+  document.body.style.cursor = "url('images/spaceship.png'), auto"
   score.innerText = ''
   scorePoints = 0
 

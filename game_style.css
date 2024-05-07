@@ -6,8 +6,7 @@ body {
   position: relative;
   overflow-x: hidden;
 
-  cursor: url('images/Small_Plane.png'), auto;
-
+  cursor: url('images/spaceship.png'), auto;
   background: url('images/background.png');
   background-repeat: no-repeat;
   background-size: cover;
@@ -57,7 +56,6 @@ span {
   width: 57em;
   background-color: rgba(18, 18, 18, 0.724);
   color: white;
-  /* display: flex; */
   flex-direction: column;
   justify-content: center;
   align-items: center;
