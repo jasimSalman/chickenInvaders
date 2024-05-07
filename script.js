@@ -1,21 +1,16 @@
 let chickensContainer = document.querySelector('.container')
 let moveChickenRightInterval
 let moveChickenLeftInterval
-let xAxis
-let yAxis
 let mouseX
 let mouseY
 let score = document.querySelector('span')
 let scorePoints = 0
 let remainingLife = 2
-
 let initialInterval = 50
 let intervalDecrease = 5
 let currentInterval = initialInterval
-
 let endGame = document.querySelector('.end_game')
 let lifePoints = document.querySelectorAll('.lifepoints .point')
-
 let isGameOver = false
 let playAgain = document.querySelector('.playAgain')
 
@@ -27,7 +22,7 @@ const init = () => {
   moveChickenRight()
 }
 
-//This fucntion to reset the game after each round
+//This function to reset the game after each round
 const reset = () => {
   chickensContainer.style.top = '0'
   chickensContainer.style.left = '0'
@@ -37,10 +32,8 @@ const reset = () => {
   init()
 }
 
-//This functio to allow the palyer to shoot from his spaceship
-const shootChicken = (event) => {
-  xAxis = event.clientX
-  yAxis = event.clientY
+//This function allows the player to shoot
+const shootChicken = () => {
   let shoot = newElement(
     'div',
     "url('images/fire.png')",
@@ -48,15 +41,15 @@ const shootChicken = (event) => {
     '200px',
     'contain',
     'no-repeat',
-    `${xAxis}px`,
-    `${yAxis}px`,
+    `${mouseX}px`,
+    `${mouseY}px`,
     'fixed'
   )
   document.body.append(shoot)
   moveShoots(shoot)
 }
 
-//This function  will append chickens randomly in the window
+//This function  will append chickens randomly in the document
 const repeatChicken = () => {
   let repeatCount = Math.floor(Math.random() * 11) + 5
 
@@ -75,7 +68,7 @@ const repeatChicken = () => {
   document.body.appendChild(chickensContainer)
 }
 
-//This function will creat new elemnts to append on the window
+//This function will create new elements
 const newElement = (
   elemType,
   backgroundImg,
@@ -99,27 +92,27 @@ const newElement = (
   return elem
 }
 
-//This functio will check if the bullet hit the chicken
-const chickenShootCollision = (shoot, chick) => {
-  let chickenBoundaries = chick.getBoundingClientRect()
-  let bulleBoundaries = shoot.getBoundingClientRect()
+//This function will check if the bullet hit the chicken
+const chickenShootCollision = (shoot, chicken) => {
+  let chickenBoundaries = chicken.getBoundingClientRect()
+  let bulletBoundaries = shoot.getBoundingClientRect()
   if (
-    chickenBoundaries.top <= bulleBoundaries.bottom &&
-    chickenBoundaries.bottom >= bulleBoundaries.top &&
-    chickenBoundaries.left <= bulleBoundaries.right &&
-    chickenBoundaries.right >= bulleBoundaries.left
+    chickenBoundaries.top <= bulletBoundaries.bottom &&
+    chickenBoundaries.bottom >= bulletBoundaries.top &&
+    chickenBoundaries.left <= bulletBoundaries.right &&
+    chickenBoundaries.right >= bulletBoundaries.left
   ) {
     let xAxis = chickenBoundaries.left + chickenBoundaries.width / 2
     let yAxis = chickenBoundaries.top + chickenBoundaries.height / 2
     scorePoints += 20
     score.innerHTML = scorePoints
-    chick.remove()
+    chicken.remove()
     shoot.remove()
     changeChiken(xAxis, yAxis)
   }
 }
 
-//This function  will iterate over the chickens and check for the collision
+//This function will iterate over the chickens and check for collision
 const isCollison = (shoot) => {
   let chickenElements = Array.from(chickensContainer.children)
   let collisionOccurred = false
@@ -130,7 +123,7 @@ const isCollison = (shoot) => {
   })
 }
 
-//This function responsible for moving the shoot
+//This function responsible for moving the bullet
 const moveShoots = (shoot) => {
   let shootInterval = setInterval(function () {
     shoot.style.top = shoot.offsetTop - 10 + 'px'
@@ -144,7 +137,7 @@ const moveShoots = (shoot) => {
 }
 
 //This function will remove the chicken once hit by a shoot and place a cooked chicken in his place
-const changeChiken = (xAxis, yAxis) => {
+const changeChiken = (mouseX, mouseY) => {
   let deathChicken = newElement(
     'div',
     "url('images/cooked_chicken.png')",
@@ -152,8 +145,8 @@ const changeChiken = (xAxis, yAxis) => {
     '25px',
     'contain',
     'no-repeat',
-    `${xAxis}px`,
-    `${yAxis}px`,
+    `${mouseX}px`,
+    `${mouseY}px`,
     'fixed'
   )
 
@@ -358,6 +351,5 @@ const mouseMovments = (event) => {
 
 document.addEventListener('click', shootChicken)
 document.addEventListener('mousemove', mouseMovments)
-
 window.addEventListener('load', init)
 playAgain.addEventListener('click', playAgainFunction)
