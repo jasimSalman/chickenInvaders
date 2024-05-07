@@ -7,7 +7,7 @@ let mouseX
 let mouseY
 let score = document.querySelector('span')
 let scorePoints = 0
-let remainingLife = 3
+let remainingLife = 2
 
 let initialInterval = 50
 let intervalDecrease = 5
@@ -290,10 +290,11 @@ const eggPlayerCollision = () => {
       eggBoundaries.right >= mouseX
     ) {
       if (remainingLife > 0) {
-        lifePoints[remainingLife - 1].style.display = 'none'
+        lifePoints[remainingLife].style.display = 'none'
         remainingLife--
         eggs[i].remove()
       } else {
+        // lifePoints[0].style.display = 'none'
         gameOver()
       }
     }
@@ -306,12 +307,13 @@ const playAgainFunction = () => {
   document.addEventListener('click', shootChicken)
   document.addEventListener('mousemove', mouseMovments)
   document.body.style.cursor = "url('images/Small_Plane.png'), auto"
+  score.innerText = ''
   scorePoints = 0
 
   lifePoints.forEach((element) => {
     element.style.display = 'flex'
   })
-  remainingLife = 3
+  remainingLife = 2
 
   chickensContainer.style.top = '0'
   chickensContainer.style.left = '0'
@@ -326,8 +328,6 @@ const gameOver = () => {
   endGame.style.display = 'flex'
   clearInterval(moveChickenLeftInterval)
   clearInterval(moveChickenRightInterval)
-
-  // chickensContainer.style.display = 'none'
 
   document.removeEventListener('click', shootChicken)
   document.removeEventListener('mousemove', mouseMovments)
