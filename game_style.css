@@ -64,15 +64,17 @@ span {
   position: relative;
   height: 200px;
   align-self: center;
-  left: 10%;
+  left: 14%;
   border-radius: 10px;
 }
 
-button,
-a {
+button {
   width: 101px;
   height: 40px;
   font-size: 19px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .buttons {
@@ -90,7 +92,12 @@ a {
 }
 
 a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-decoration: none;
-  /* background-color: white; */
   color: black;
+  width: 101px;
+  height: 40px;
+  font-size: 19px;
 }

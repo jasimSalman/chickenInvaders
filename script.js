@@ -41,7 +41,6 @@ const reset = () => {
 const shootChicken = (event) => {
   xAxis = event.clientX
   yAxis = event.clientY
-
   let shoot = newElement(
     'div',
     "url('images/fire.png')",
@@ -294,7 +293,6 @@ const eggPlayerCollision = () => {
         remainingLife--
         eggs[i].remove()
       } else {
-        // lifePoints[0].style.display = 'none'
         gameOver()
       }
     }
@@ -315,6 +313,8 @@ const playAgainFunction = () => {
   })
   remainingLife = 2
 
+  currentInterval = initialInterval
+
   chickensContainer.style.top = '0'
   chickensContainer.style.left = '0'
   clearInterval(moveChickenLeftInterval)
@@ -326,6 +326,7 @@ const playAgainFunction = () => {
 const gameOver = () => {
   isGameOver = true
   endGame.style.display = 'flex'
+  lifePoints[0].style.display = 'none'
   clearInterval(moveChickenLeftInterval)
   clearInterval(moveChickenRightInterval)
 
