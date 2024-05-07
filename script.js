@@ -14,6 +14,9 @@ let intervalDecrease = 5
 let currentInterval = initialInterval
 
 let endGame = document.querySelector('.end_game')
+let eggs = document.querySelectorAll('.egg')
+
+let isGameOver = false
 
 //This function to initiate the game
 const init = () => {
@@ -285,17 +288,27 @@ const eggPlayerCollision = () => {
       if (remainingLife > 0) {
         lifePoints[remainingLife - 1].style.display = 'none'
         remainingLife--
-        console.log('Life point removed. Remaining life points:', remainingLife)
         eggs[i].remove()
-      } else if (remainingLife < 1) {
-        console.log('game over')
-
-        gameReset()
+      } else {
+        gameOver()
       }
     }
   }
 }
-const gameOver = () => {}
+
+const gameOver = () => {
+  endGame.style.display = 'flex'
+  clearInterval(moveChickenLeftInterval)
+  clearInterval(moveChickenRightInterval)
+
+  document.removeEventListener('click', shootChicken)
+  document.removeEventListener('mousemove', handleMouseMove)
+  document.body.style.cursor = 'pointer'
+
+  for (let i = 0; i < eggs.length; i++) {
+    eggs[i].style.display = 'none'
+  }
+}
 
 //This function will check if there are a collsion between the player and the chickens
 const chickenPlayerCollision = () => {
@@ -307,18 +320,18 @@ const chickenPlayerCollision = () => {
     conatinerBoundaries.left <= mouseX &&
     conatinerBoundaries.right >= mouseX
   ) {
-    document.body.innerHTML = ''
-    console.log('Game over ')
-    endGame.display = 'flex'
+    gameOver()
   }
 }
 
-document.addEventListener('click', shootChicken)
-document.addEventListener('mousemove', function (event) {
+function handleMouseMove(event) {
   mouseX = event.clientX
   mouseY = event.clientY
   eggPlayerCollision()
   chickenPlayerCollision()
-})
+}
+
+document.addEventListener('click', shootChicken)
+document.addEventListener('mousemove', handleMouseMove)
 
 window.addEventListener('load', init)
